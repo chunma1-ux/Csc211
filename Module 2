@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Bank {
     private double amount;
@@ -8,23 +9,23 @@ public class Bank {
         amount = 0.0;
         transactions = new ArrayList<>();
     }
-    public void deposit(double amount) {
-        amount += amount;  
-        transactions.add(amount);  
+
+    public void deposit(double depositAmount) {
+        amount += depositAmount;
+        transactions.add(depositAmount);
     }
 
-    public void withdraw(double amount) {
-        if (amount <= amount) {
-            amount -= amount; 
-            transactions(-amount); 
+    public void withdraw(double withdrawalAmount) {
+        if (withdrawalAmount <= amount) {
+            amount -= withdrawalAmount;
+            transactions.add(-withdrawalAmount);
         } else {
             System.out.println("Insufficient funds for this withdrawal.");
         }
     }
 
-  
     public void listInteractions() {
-        if (transactions.isEmpty()) {
+        if (amount == 0) {
             System.out.println("No transactions yet.");
         } else {
             System.out.println("Transactions:");
@@ -34,17 +35,28 @@ public class Bank {
         }
     }
 
-    
     public double getBalance() {
         return amount;
     }
 
-    
     public static void main(String[] args) {
         Bank bank = new Bank();
-        bank.deposit(1000);   
-        bank.withdraw(500);   
-        bank.deposit(200);    
-        bank.listInteractions();  
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter deposit amount:");
+        double depositAmount = scanner.nextDouble();  
+        bank.deposit(depositAmount);  
+
+        System.out.println("Balance after deposit: " + bank.getBalance());
+
+        System.out.println("Enter withdrawal amount:");
+        double withdrawalAmount = scanner.nextDouble();  
+        bank.withdraw(withdrawalAmount);  
+
+        System.out.println("Balance after withdrawal: " + bank.getBalance());
+
+        bank.listInteractions();
+
+        scanner.close();  
     }
 }
