@@ -5,18 +5,18 @@ public class Bank {
     private ArrayList<Double> transactions;
 
     public Bank() {
-        this.amount = 0.0;
-        this.transactions = new ArrayList<>();
+        amount = 0.0;
+        transactions = new ArrayList<>();
     }
     public void deposit(double amount) {
-        this.amount += amount;  
-        this.transactions.add(amount);  
+        amount += amount;  
+        transactions.add(amount);  
     }
 
     public void withdraw(double amount) {
-        if (amount <= this.amount) {
-            this.amount -= amount; 
-            this.transactions.add(-amount); 
+        if (amount <= amount) {
+            amount -= amount; 
+            transactions(-amount); 
         } else {
             System.out.println("Insufficient funds for this withdrawal.");
         }
@@ -36,7 +36,7 @@ public class Bank {
 
     
     public double getBalance() {
-        return this.amount;
+        return amount;
     }
 
     
