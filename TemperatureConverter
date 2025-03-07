@@ -1,0 +1,35 @@
+public class TemperatureConverter {
+
+    public double celsiusToFahrenheit(double celsius) {
+        return (celsius * 9 / 5) + 32;
+    }
+
+    public double fahrenheitToCelsius(double fahrenheit) {
+        return (fahrenheit - 32) * 5 / 9;
+    }
+}
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+public class TemperatureConverterTest {
+
+    @Test
+    public void testCelsiusToFahrenheit() {
+        TemperatureConverter converter = new TemperatureConverter();
+        // Test conversion from Celsius to Fahrenheit
+        assertEquals(32, converter.celsiusToFahrenheit(0), 0.001);  
+        assertEquals(212, converter.celsiusToFahrenheit(100), 0.001);  
+        assertEquals(-40, converter.celsiusToFahrenheit(-40), 0.001);  
+    }
+
+    @Test
+    public void testFahrenheitToCelsius() {
+        TemperatureConverter converter = new TemperatureConverter();
+        // Test conversion from Fahrenheit to Celsius
+        assertEquals(0, converter.fahrenheitToCelsius(32), 0.001); 
+        assertEquals(100, converter.fahrenheitToCelsius(212), 0.001);  
+        assertEquals(-40, converter.fahrenheitToCelsius(-40), 0.001);  
+    }
+}
+
