@@ -1,0 +1,33 @@
+public class Calculator {
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+}
+
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
+public class CalculatorTest {
+
+    @Test
+    public void testAdd() {
+        Calculator calc = new Calculator();
+        
+        assertEquals(5, calc.add(2, 3));  
+        assertEquals(0, calc.add(-1, 1));  
+    }
+
+    @Test
+    public void testSubtract() {
+        Calculator calc = new Calculator();
+        
+        assertEquals(2, calc.subtract(5, 3));  
+        assertEquals(-2, calc.subtract(3, 5));  
+        assertEquals(0, calc.subtract(0, 0));  
+    }
+}
