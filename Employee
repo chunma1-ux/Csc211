@@ -1,0 +1,80 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class EmployeeInformationForm {
+    public static void main(String[] args) {
+        
+        Frame frame = new Frame("Employee Information Form");
+
+        Label nameLabel = new Label("Name:");
+        Label empIdLabel = new Label("Employee ID:");
+        Label deptLabel = new Label("Department:");
+        
+        TextField nameField = new TextField();
+        TextField empIdField = new TextField();
+        TextField deptField = new TextField();
+
+        Button submitButton = new Button("Submit");
+
+        frame.setLayout(new GridLayout(4, 2, 10, 10));
+
+        frame.add(nameLabel);
+        frame.add(nameField);
+        frame.add(empIdLabel);
+        frame.add(empIdField);
+        frame.add(deptLabel);
+        frame.add(deptField);
+        frame.add(submitButton);
+
+        frame.setSize(400, 200);
+        frame.setVisible(true);
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nameField.getText();
+                String empId = empIdField.getText();
+                String dept = deptField.getText();
+
+                if (name.isEmpty() || empId.isEmpty() || dept.isEmpty()) {
+                    
+                    Dialog errorDialog = new Dialog(frame, "Error", true);
+                    errorDialog.setLayout(new FlowLayout());
+                    errorDialog.add(new Label("All fields must be filled out!"));
+                    Button okButton = new Button("OK");
+                    errorDialog.add(okButton);
+                    okButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            errorDialog.setVisible(false);
+                        }
+                    });
+                    errorDialog.setSize(300, 100);
+                    errorDialog.setVisible(true);
+                } else {
+                   
+                    String message = "Employee Name: " + name + "\nEmployee ID: " + empId + "\nDepartment: " + dept;
+                    Dialog infoDialog = new Dialog(frame, "Employee Information", true);
+                    infoDialog.setLayout(new FlowLayout());
+                    infoDialog.add(new Label(message));
+                    Button closeButton = new Button("Close");
+                    infoDialog.add(closeButton);
+                    closeButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            infoDialog.setVisible(false);
+                        }
+                    });
+                    infoDialog.setSize(300, 150);
+                    infoDialog.setVisible(true);
+                }
+            }
+        });
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(0);
+            }
+        });
+    }
+}
