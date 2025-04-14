@@ -1,0 +1,178 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// Base Class: Package
+class Package {
+    private double weightKg;
+    private String destination;
+
+    public Package(double weightKg, String destination) {
+        this.weightKg = weightKg;
+        this.destination = destination;
+    }
+
+    public double getWeightKg() {
+        return weightKg;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public double calculateShippingCost() {
+        throw new UnsupportedOperationException("Subclasses must implement calculateShippingCost()");
+    }
+
+    public String getTrackingInfo() {
+        return "Package to " + destination + " (Weight: " + weightKg + " kg) - Status: Processing";
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " to " + destination + " weighing " + weightKg + " kg";
+    }
+}
+
+// Inherited Class: DomesticPackage
+class DomesticPackage extends Package {
+    private static final double BASE_RATE = 2.50;
+    private static final double RATE_PER_KG = 1.00;
+    private String originState;
+
+    public DomesticPackage(double weightKg, String destination, String originState) {
+        super(weightKg, destination);
+        this.originState = originState;
+    }
+
+    public String getOriginState() {
+        return originState;
+    }
+
+    @Override
+    public double calculateShippingCost() {
+        return BASE_RATE + (getWeightKg() * RATE_PER_KG);
+    }
+
+    @Override
+    public String getTrackingInfo() {
+        return super.getTrackingInfo() + ", Origin: " + originState;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " from " + originState;
+    }
+}
+
+// Inherited Class: InternationalPackage
+class InternationalPackage extends Package {
+    private static final double BASE_RATE = 5.00;
+    private static final double RATE_PER_KG = 2.00;
+    private static final double CUSTOMS_FEE_PERCENTAGE = 0.05; // 5% of the base cost
+    private String countryOfOrigin;
+
+    public InternationalPackage(double weightKg, String destination, String countryOfOrigin) {
+        super(weightKg, destination);
+        this.countryOfOrigin = countryOfOrigin;
+    }
+
+    public String getCountryOfOrigin() {
+        return countryOfOrigin;
+    }
+
+    @Override
+    public double calculateShippingCost() {
+        double baseCost = BASE_RATE + (getWeightKg() * RATE_PER_KG);
+        double customsFee = baseCost * CUSTOMS_FEE_PERCENTAGE;
+        return baseCost + customsFee;
+    }
+
+    @Override
+    public String getTrackingInfo() {
+        return super.getTrackingInfo() + ", Origin: " + countryOfOrigin + ", Status: In Transit Internationally";
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " from " + countryOfOrigin;
+    }
+}
+
+// Class using Composition: Shipment
+class Shipment {
+    private String shipmentId;
+    private List<Package> packages;
+
+    public Shipment(String shipmentId) {
+        this.shipmentId = shipmentId;
+        this.packages = new ArrayList<>();
+    }
+
+    public String getShipmentId() {
+        return shipmentId;
+    }
+
+    public void addPackage(Package packageObj) {
+        if (packageObj instanceof Package) {
+            this.packages.add(packageObj);
+        } else {
+            throw new IllegalArgumentException("Can only add Package objects to the shipment.");
+        }
+    }
+
+    public double calculateTotalCost() {
+        double totalCost = 0;
+        for (Package pkg : this.packages) {
+            totalCost += pkg.calculateShippingCost();
+        }
+        return totalCost;
+    }
+
+    public void trackAllPackages() {
+        System.out.println("\n--- Tracking Information for Shipment ID: " + this.shipmentId + " ---");
+        if (this.packages.isEmpty()) {
+            System.out.println("No packages in this shipment.");
+            return;
+        }
+        for (Package pkg : this.packages) {
+            System.out.println("- " + pkg + ": " + pkg.getTrackingInfo());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Shipment ID: " + this.shipmentId + " containing " + this.packages.size() + " packages.";
+    }
+
+    public static void main(String[] args) {
+        // Creating package instances (Inheritance)
+        DomesticPackage domestic1 = new DomesticPackage(2.5, "Los Angeles, CA", "New York");
+        InternationalPackage international1 = new InternationalPackage(1.0, "London, UK", "USA");
+        DomesticPackage domestic2 = new DomesticPackage(5.0, "Chicago, IL", "Texas");
+
+        // Creating a shipment (Composition)
+        Shipment shipment1 = new Shipment("SHP001");
+
+        // Adding packages to the shipment (Composition)
+        shipment1.addPackage(domestic1);
+        shipment1.addPackage(international1);
+        shipment1.addPackage(domestic2);
+
+        // Polymorphism in action: Calculating shipping costs
+        System.out.println("--- Shipping Costs ---");
+        List<Package> packages = List.of(domestic1, international1, domestic2);
+        for (Package pkg : packages) {
+            System.out.printf("%s: Shipping Cost = $%.2f%n", pkg, pkg.calculateShippingCost());
+            System.out.println("--------------------");
+        }
+
+        // Tracking all packages in the shipment
+        shipment1.trackAllPackages();
+
+        // Calculating the total cost of the shipment
+        double totalShipmentCost = shipment1.calculateTotalCost();
+        System.out.printf("\nTotal shipping cost for %s: $%.2f%n", shipment1, totalShipmentCost);
+
+        System.out.println(shipment1); // Calls the toString() method of Shipment
+    }
+}
