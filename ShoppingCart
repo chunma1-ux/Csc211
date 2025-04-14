@@ -1,0 +1,138 @@
+import java.util.ArrayList;
+import java.util.List;
+
+// Base Class: Product
+class Product {
+    private String name;
+    private double price;
+
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public double calculateShipping() {
+        // Default shipping calculation
+        return 2.0;
+    }
+
+    @Override
+    public String toString() {
+        return name + " ($" + String.format("%.2f", price) + ")";
+    }
+}
+
+// Inherited Class: Book
+class Book extends Product {
+    private String author;
+
+    public Book(String name, double price, String author) {
+        super(name, price);
+        this.author = author;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    @Override
+    public double calculateShipping() {
+        // Different shipping calculation for books (e.g., lower rate)
+        return 1.0;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " by " + author;
+    }
+}
+
+// Inherited Class: Electronics
+class Electronics extends Product {
+    private double weightKg;
+
+    public Electronics(String name, double price, double weightKg) {
+        super(name, price);
+        this.weightKg = weightKg;
+    }
+
+    public double getWeightKg() {
+        return weightKg;
+    }
+
+    @Override
+    public double calculateShipping() {
+        // Shipping cost based on weight for electronics
+        return 3.0 + (0.5 * weightKg);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " (Weight: " + weightKg + " kg)";
+    }
+}
+
+// Class using Composition: ShoppingCart
+class ShoppingCart {
+    private List<Product> items;
+
+    public ShoppingCart() {
+        this.items = new ArrayList<>();
+    }
+
+    public void addItem(Product product) {
+        this.items.add(product);
+    }
+
+    public double calculateTotalShipping() {
+        double totalShipping = 0;
+        for (Product item : this.items) {
+            totalShipping += item.calculateShipping(); // Polymorphism
+        }
+        return totalShipping;
+    }
+
+    public void displayItems() {
+        System.out.println("--- Shopping Cart ---");
+        if (items.isEmpty()) {
+            System.out.println("Cart is empty.");
+            return;
+        }
+        for (Product item : items) {
+            System.out.println(item + " - Shipping: $" + String.format("%.2f", item.calculateShipping()));
+        }
+        System.out.println("---------------------");
+    }
+
+    public static void main(String[] args) {
+        // Creating product instances (Inheritance)
+        Book book1 = new Book("The Hitchhiker's Guide to the Galaxy", 15.00, "Douglas Adams");
+        Electronics laptop = new Electronics("Laptop", 1200.00, 2.0);
+        Product genericItem = new Product("Coffee Mug", 8.00);
+        Book book2 = new Book("Pride and Prejudice", 12.50, "Jane Austen");
+
+        // Creating a shopping cart (Composition)
+        ShoppingCart cart = new ShoppingCart();
+
+        // Adding items to the cart (Composition)
+        cart.addItem(book1);
+        cart.addItem(laptop);
+        cart.addItem(genericItem);
+        cart.addItem(book2);
+
+        // Displaying items in the cart with their shipping costs
+        cart.displayItems();
+
+        // Calculating the total shipping cost (Polymorphism)
+        double totalShippingCost = cart.calculateTotalShipping();
+        System.out.printf("Total Shipping Cost: $%.2f%n", totalShippingCost);
+    }
+}
