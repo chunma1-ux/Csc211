@@ -1,0 +1,100 @@
+// Abstract Class Example
+abstract class Shape {
+    // Abstract methods (no implementation here)
+    public abstract double area();
+    public abstract double perimeter();
+
+    // Concrete method (has an implementation)
+    public String describe() {
+        return "This is a shape.";
+    }
+}
+
+class Rectangle extends Shape {
+    private double width;
+    private double height;
+
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public double area() {
+        return width * height;
+    }
+
+    @Override
+    public double perimeter() {
+        return 2 * (width + height);
+    }
+}
+
+class Circle extends Shape {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public double area() {
+        return Math.PI * radius * radius;
+    }
+
+    @Override
+    public double perimeter() {
+        return 2 * Math.PI * radius;
+    }
+}
+
+// Interface Example
+interface Printable {
+    void printDocument(String content);
+}
+
+class Document implements Printable {
+    private String content;
+
+    public Document(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public void printDocument(String content) {
+        System.out.println("Printing document: " + content);
+    }
+}
+
+class Image implements Printable {
+    private String filename;
+
+    public Image(String filename) {
+        this.filename = filename;
+    }
+
+    @Override
+    public void printDocument(String filename) {
+        System.out.println("Printing image: " + filename);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Rectangle rectangle = new Rectangle(5, 10);
+        System.out.println("Rectangle Area: " + rectangle.area());
+        System.out.println("Rectangle Perimeter: " + rectangle.perimeter());
+        System.out.println(rectangle.describe());
+
+        Circle circle = new Circle(7);
+        System.out.println("Circle Area: " + circle.area());
+        System.out.println("Circle Perimeter: " + circle.perimeter());
+        System.out.println(circle.describe());
+
+        Document document = new Document("This is the content of the document.");
+        document.printDocument(document.content);
+
+        Image image = new Image("photo.jpg");
+        image.printDocument(image.filename);
+    }
+}
